@@ -1,5 +1,13 @@
-import PanoramaViewer from './PanoramaViewer.tsx'
+import { useState } from 'react'
+import PanoramaViewer from './PanoramaViewer'
+import PanoramaNav from './PanoramaNav'
 
 export default function App() {
-  return <PanoramaViewer />
+  const [currentIndex, setCurrentIndex] = useState(0)
+  return (
+    <>
+      <PanoramaViewer currentIndex={currentIndex} />
+      <PanoramaNav currentIndex={currentIndex} onSelect={setCurrentIndex} />
+    </>
+  )
 }
