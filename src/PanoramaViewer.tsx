@@ -10,22 +10,20 @@ export default function PanoramaViewer() {
     const scene = new THREE.Scene()
 
     const camera = new THREE.PerspectiveCamera(75, mount.clientWidth / mount.clientHeight, 0.1, 1000)
-    camera.position.z = 2
+    camera.position.set(0,0,0)
 
     const renderer = new THREE.WebGLRenderer({ antialias: true })
-    renderer.setSize(mount.clientWidth, mount.clientHeight)
+    renderer.setSize(window.innerWidth, window.innerHeight)
     mount.appendChild(renderer.domElement)
 
-    const geometry = new THREE.BoxGeometry()
-    const material = new THREE.MeshNormalMaterial()
-    const cube = new THREE.Mesh(geometry, material)
-    scene.add(cube)
+    const geometry = new THREE.SphereGeometry(10, 64, 64)
+    const material = new THREE.MeshNormalMaterial({ side: THREE.BackSide })
+    const sphere = new THREE.Mesh(geometry, material)
+    scene.add(sphere)
 
     let animationId: number
     const animate = () => {
       animationId = requestAnimationFrame(animate)
-      cube.rotation.x += 0.01
-      cube.rotation.y += 0.01
       renderer.render(scene, camera)
     }
     animate()
