@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { usePanoramaControls } from './hooks/usePanoramaControls'
+import { PANORAMAS } from './constants/panoramas'
 
 export default function PanoramaViewer() {
   const mountRef = useRef<HTMLDivElement>(null)
@@ -22,9 +23,9 @@ export default function PanoramaViewer() {
     mount.appendChild(renderer.domElement)
 
     const geometry = new THREE.SphereGeometry(10, 64, 64)
+    const texture = new THREE.TextureLoader().load(PANORAMAS[2].path)
     const material = new THREE.MeshBasicMaterial({ 
-      color: 0x00ff00, 
-      wireframe: true, 
+      map: texture,
       side: THREE.BackSide 
     })
     const sphere = new THREE.Mesh(geometry, material)
@@ -37,7 +38,6 @@ export default function PanoramaViewer() {
     }
     animate()
 
-    // Cleanup
     return () => {
       cancelAnimationFrame(animationId)
       mount.removeChild(renderer.domElement)
