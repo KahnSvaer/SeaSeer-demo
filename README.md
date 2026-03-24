@@ -1,73 +1,74 @@
-# React + TypeScript + Vite
+# SeaSee'r — Underwater Mapping and Exploration Viewer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A panoramic image viewer built with THREE.js and React, allowing users to explore 360° equirectangular panoramas with mouse-drag navigation.
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Project Structure
+```
+seaseer/
+├── .github/workflows/
+│   └── ci.yml                        # GitHub Actions CI
+├── public/panoramas/                 # Panorama images
+├── src/
+│   ├── constants/
+│   │   └── panoramas.ts              # Panorama metadata
+│   ├── hooks/
+│   │   └── usePanoramaControls.ts    # Mouse drag controls
+│   ├── App.tsx                       # Root component
+│   ├── main.tsx                      # Entry point
+│   ├── PanoramaNav.tsx               # Navigation buttons
+│   ├── PanoramaViewer.tsx            # THREE.js viewer
+│   └── index.css                     # Global styles
+├── tests/e2e/
+│   ├── screenshots/                  # Generated test artifacts
+│   └── panorama.test.js              # Puppeteer + Vitest E2E tests
+└── vite.config.ts
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Tech Stack
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- React + TypeScript
+- THREE.js — inverse sphere with BackSide rendering
+- Vite
+- Puppeteer + Vitest — E2E testing
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Getting Started
+
+### Install dependencies
+```bash
+npm install
 ```
+
+### Run development server
+```bash
+npm run dev
+```
+
+### Run E2E tests (requires dev server running)
+```bash
+npm run test:e2e
+```
+
+### Run CI tests (builds and serves automatically)
+```bash
+npm run test:ci
+```
+## How It Works
+
+- A `SphereGeometry` is rendered with `THREE.BackSide` so the inner face is visible
+- The camera is placed at the center `(0, 0, 0)` of the sphere
+- Equirectangular panorama images are applied as textures via `TextureLoader`
+- Mouse drag updates a `Spherical` coordinate which is converted to a `camera.lookAt` target
+- Navigation buttons swap the texture on the existing material without reinitialising THREE.js
+
+## CI
+
+GitHub Actions runs on every push to `main`:
+1. Installs dependencies
+2. Builds the project
+3. Starts the preview server
+4. Runs E2E tests
+5. Uploads screenshots as artifacts
+
+## AI Review
+
+TBD
