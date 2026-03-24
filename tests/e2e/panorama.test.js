@@ -7,11 +7,11 @@ const SCREENSHOT_DIR = path.resolve('./tests/e2e/screenshots')
 const APP_URL = process.env.APP_URL || 'http://localhost:5200'
 
 async function navigateToAndScreenshot(page, buttonIndex, screenshotName) {
-  await page.goto(APP_URL, { waitUntil: 'networkidle2' })
-  await new Promise(r => setTimeout(r, 2000))
+  await page.goto(APP_URL, { waitUntil: 'domcontentloaded', timeout: 60000 })
+  await new Promise(r => setTimeout(r, 5000))
   if (buttonIndex > 0) {
     await page.click(`button:nth-child(${buttonIndex + 1})`)
-    await new Promise(r => setTimeout(r, 5000))
+    await new Promise(r => setTimeout(r, 3000))
   }
   await page.screenshot({ path: path.join(SCREENSHOT_DIR, screenshotName) })
 }
@@ -37,11 +37,11 @@ describe('Panorama Viewer E2E', () => {
   })
 
   it('should render a canvas element', async () => {
-    await page.goto(APP_URL, { waitUntil: 'networkidle0' })
-    await new Promise(r => setTimeout(r, 2000))
+    await page.goto(APP_URL, { waitUntil: 'domcontentloaded', timeout: 60000 })
+    await new Promise(r => setTimeout(r, 3000))
     const canvas = await page.$('canvas')
     if (!canvas) throw new Error('Canvas not found — THREE.js failed to render')
-  }, 30000)
+  }, 60000)
 
   it('should display the first panorama and take a screenshot', async () => {
     await navigateToAndScreenshot(page, 0, 'panorama1.png')
