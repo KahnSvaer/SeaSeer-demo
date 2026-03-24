@@ -8,7 +8,7 @@ interface Props {
 }
 
 export default function PanoramaViewer({ currentIndex }: Props) {
-  const mountRef = useRef<HTMLDivElement>(null)
+  const mountRef = useRef<HTMLDivElement>((null!))
   const [camera, setCamera] = useState<THREE.PerspectiveCamera | null>(null)
   const materialRef = useRef<THREE.MeshBasicMaterial | null>(null)
 
