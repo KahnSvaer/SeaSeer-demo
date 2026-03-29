@@ -15,7 +15,9 @@ seaseer/
 │   │   └── usePanoramaControls.ts    # Mouse drag controls
 │   ├── App.tsx                       # Root component
 │   ├── main.tsx                      # Entry point
-│   ├── PanoramaNav.tsx               # Navigation buttons
+│   ├── nav/
+│   │   ├── PanoramaNav.tsx           # Navigation buttons
+│   │   └── PanoramaNav.module.css    # Navigation styles                
 │   ├── PanoramaViewer.tsx            # THREE.js viewer
 │   └── index.css                     # Global styles
 ├── tests/e2e/

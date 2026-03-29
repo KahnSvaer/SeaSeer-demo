@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import PanoramaViewer from './PanoramaViewer'
-import PanoramaNav from './PanoramaNav'
+import PanoramaNav from './nav/PanoramaNav'
 
 export default function App() {
   const [currentIndex, setCurrentIndex] = useState(0)
