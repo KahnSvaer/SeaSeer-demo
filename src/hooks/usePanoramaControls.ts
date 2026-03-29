@@ -1,21 +1,20 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 
-export function usePanoramaControls(camera: THREE.PerspectiveCamera | null) {
+export function usePanoramaControls(cameraRef: React.RefObject<THREE.PerspectiveCamera | null>) {
   const isDragging = useRef(false)
   const previousMouse = useRef({ x: 0, y: 0 })
   const spherical = useRef(new THREE.Spherical(1, Math.PI / 2, 0))
+  const target = new THREE.Vector3()
 
   useEffect(() => {
-    if (!camera) return
-
     const onMouseDown = (e: MouseEvent) => {
       isDragging.current = true
       previousMouse.current = { x: e.clientX, y: e.clientY }
     }
 
     const onMouseMove = (e: MouseEvent) => {
-      if (!isDragging.current) return
+      if (!isDragging.current || !cameraRef.current) return 
 
       const deltaX = e.clientX - previousMouse.current.x
       const deltaY = e.clientY - previousMouse.current.y
@@ -25,10 +24,9 @@ export function usePanoramaControls(camera: THREE.PerspectiveCamera | null) {
 
       spherical.current.phi = Math.max(0.1, Math.min(Math.PI - 0.1, spherical.current.phi))
 
-      const target = new THREE.Vector3()
+      
       target.setFromSpherical(spherical.current)
-      camera.lookAt(target)
-
+      cameraRef.current.lookAt(target)
       previousMouse.current = { x: e.clientX, y: e.clientY }
     }
 
@@ -45,5 +43,5 @@ export function usePanoramaControls(camera: THREE.PerspectiveCamera | null) {
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('mouseup', onMouseUp)
     }
-  }, [camera])
+  }, [])
 }
