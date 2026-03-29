@@ -39,6 +39,15 @@ export default function PanoramaViewer({ currentIndex }: Props) {
     const sphere = new THREE.Mesh(geometry, material)
     scene.add(sphere)
 
+    const handleResize = () => {
+      const w = mount.clientWidth
+      const h = mount.clientHeight
+      cam.aspect = w / h
+      cam.updateProjectionMatrix()
+      renderer.setSize(w, h)
+    }
+    window.addEventListener('resize', handleResize)
+
     let animationId: number
     const animate = () => {
       animationId = requestAnimationFrame(animate)
@@ -48,6 +57,7 @@ export default function PanoramaViewer({ currentIndex }: Props) {
 
     return () => {
       cancelAnimationFrame(animationId)
+      window.removeEventListener('resize', handleResize)
       mount.removeChild(renderer.domElement)
       renderer.dispose()
     }
