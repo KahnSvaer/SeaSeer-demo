@@ -15,6 +15,7 @@ export default function PanoramaNav({ currentIndex, onSelect }: Props) {
           onClick={() => onSelect(index)}
           aria-label={`View ${panorama.name}`}
           aria-current={currentIndex === index ? 'true' : undefined}
+          data-testid={`panorama-btn-${index}`}
           className={`${styles.button} ${currentIndex === index ? styles.buttonActive : ''}`}
         >
           {panorama.name}
